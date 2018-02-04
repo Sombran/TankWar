@@ -11,6 +11,7 @@ import com.tank.award.TankTimer
 import com.tank.bang.BigBang
 import com.tank.bang.LittleBang
 import com.tank.tankConst.GAME_OVER
+import com.tank.tankConst.P1_TANK_UP
 import com.tank.tankConst.PAUSE
 import com.tank.tankEnum.Award
 import com.tank.tankEnum.Direction
@@ -28,7 +29,7 @@ import java.util.*
  * @author youbo
  * 2018/2/3
  */
-class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) : StageAbstract(context) {
+class RunningStage(context: TankGame, isPair: Boolean = false, private val level: Int = 1) : StageAbstract(context) {
 
     /**
      * 英雄坦克
@@ -85,33 +86,38 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
      */
     private val home = Home()
 
+    companion object {
+        // 左上角、正上方、右上角三个位置的x坐标
+        val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
+        val enemyArray = arrayOf(GreenTank::class.java, GreyTank::class.java, OrangeTank::class.java)
+    }
+
     init {
-        var file = File("map/$level.txt")
-        if (!file.exists()) {
-           file =  File("map/1.txt")
-        }
-        if (file.exists()) {
-            // 加载地图
-            val scanner = Scanner(file)
-            while (scanner.hasNext()) {
-                val className = scanner.next()
-                val clazz = Class.forName(className)
-                val x = scanner.nextInt()
-                val y = scanner.nextInt()
-                val staticObj = clazz.getConstructor(Int::class.java, Int::class.java).newInstance(x, y)
-                objects.add(staticObj as StaticObject)
+        // level为0代表从编辑地图中启动
+        if (level !=0) {
+            var file = File("map/$level.txt")
+            if (!file.exists()) {
+                file = File("map/1.txt")
+            }
+            if (file.exists()) {
+                // 加载地图
+                val scanner = Scanner(file)
+                while (scanner.hasNext()) {
+                    val className = scanner.next()
+                    val clazz = Class.forName(className)
+                    val x = scanner.nextInt()
+                    val y = scanner.nextInt()
+                    val staticObj = clazz.getConstructor(Int::class.java, Int::class.java).newInstance(x, y)
+                    objects.add(staticObj as StaticObject)
+                }
             }
         }
 
-        // TODO 三个位置生成三个敌人
-        enemies.add(GreyTank())
-        enemies.add(GreenTank())
-        enemies.add(OrangeTank())
-
-        hero.addFire()
+        // 三个位置生成三个敌人
+        xArray.mapTo(enemies) { enemyArray.shuffle().getConstructor(Int::class.java).newInstance(it) }
     }
 
-    constructor(objects: List<StaticObject>, context: TankGame) : this(context) {
+    constructor(objects: List<StaticObject>, context: TankGame, level: Int) : this(context, level = level) {
         this.objects.clear()
         this.objects.addAll(objects)
     }
@@ -471,4 +477,9 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
             else -> {}
         }
     }
+
+    /**
+     * 获得数组中随机一个值
+     */
+    fun <T> Array<T>.shuffle() = this[Random().nextInt(this.size)]
 }

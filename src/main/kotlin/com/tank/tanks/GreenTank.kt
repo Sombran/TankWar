@@ -10,7 +10,7 @@ import com.tank.tankEnum.Direction
  * @author youbo
  * 2018/1/29
  */
-class GreenTank: EnemyTank() {
+class GreenTank(override var x: Int): EnemyTank() {
     override val images = mapOf(
             Direction.UP to GREEN_TANK_UP,
             Direction.DOWN to GREEN_TANK_DOWN,

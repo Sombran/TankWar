@@ -21,6 +21,8 @@ abstract class EnemyTank: Tank(), Enemy {
 
     protected abstract val images: Map<Direction, BufferedImage>
 
+    override var y = 1
+
     /**
      * 是否还有奖励，只有第一枪有奖励
      */
@@ -31,13 +33,6 @@ abstract class EnemyTank: Tank(), Enemy {
      */
     override var image: BufferedImage = GREY_TANK_UP
         get() = images[direction]!!
-
-    init {
-        // 左上角、正上方、右上角三个位置的x坐标
-        val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
-        x = xArray[Random().nextInt(3)]
-        y = 1
-    }
 
     private var shootIndex = 0
     override fun shoot(): Array<Bullet> {
