@@ -104,6 +104,9 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
         }
 
         // TODO 三个位置生成三个敌人
+        enemies.add(GreyTank())
+        enemies.add(GreyTank())
+        enemies.add(GreyTank())
     }
 
     constructor(objects: List<StaticObject>, context: TankGame) : this(context) {
@@ -123,19 +126,20 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
     }
 
     private fun drawHero(g: Graphics) {
-        g.drawImage(hero.image, hero.x, hero.y, null)
-        hero2?.let { g.drawImage(it.image, it.x, it.y, null) }
+        // 只有活着时才画玩家
+        hero.takeIf(Hero::isLive)?.let { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
+        hero2?.takeIf(Hero::isLive)?.let { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
     }
 
-    private fun drawBullet(g: Graphics) = bullets.forEach { g.drawImage(it.image, it.x, it.y, null) }
+    private fun drawBullet(g: Graphics) = bullets.forEach { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
-    private fun drawEnemy(g: Graphics) = enemies.forEach { g.drawImage(it.image, it.x, it.y, null) }
+    private fun drawEnemy(g: Graphics) = enemies.forEach { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
     private fun drawObject(g: Graphics) = objects.forEach { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
-    private fun drawAward(g: Graphics) = award?.let { g.drawImage(it.image, it.x, it.y, null) }
+    private fun drawAward(g: Graphics) = award?.let { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
-    private fun drawHome(g: Graphics) = g.drawImage(home.image, home.x, home.y, null)
+    private fun drawHome(g: Graphics) = g.drawImage(home.image, home.x, home.y, home.width, home.height, null)
 
     private fun drawState(g: Graphics) {
         if (state == GameState.GAME_OVER) {
@@ -292,20 +296,11 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
      */
     private fun dieAction() {
         enemies.filterNot(Tank::isLive).forEach { score += it.getScore(); enemies.remove(it); objects.add(BigBang(it.x, it.y)) }
-        if (!hero.isLive) {
-            // 将玩家移动到一个无效位置
-            hero.x = -100
-            hero.y = -100
-            hero.stopMove()
-        }
-        hero2?.takeIf { !it.isLive } ?.let {
-            it.x = -200
-            it.y = -200
-            it.stopMove()
-        }
         if (!home.isLive || (!hero.isLive && (hero2 == null || !hero2.isLive))) {
             hero.stopMove()
             hero2?.stopMove()
+            hero.isFire = false
+            hero2?.isFire = false
             state = GameState.GAME_OVER
         }
     }
