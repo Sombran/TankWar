@@ -124,7 +124,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
 
     private fun drawHero(g: Graphics) {
         g.drawImage(hero.image, hero.x, hero.y, null)
-        hero2?.let { g.drawImage(hero2.image, hero2.x, hero2.y, null) }
+        hero2?.let { g.drawImage(it.image, it.x, it.y, null) }
     }
 
     private fun drawBullet(g: Graphics) = bullets.forEach { g.drawImage(it.image, it.x, it.y, null) }
