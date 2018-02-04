@@ -18,9 +18,9 @@ class GreyTank: EnemyTank() {
             Direction.RIGHT to GREY_TANK_RIGHT
     )
 
-    override var speed = 2
+    override var speed = 1
     override var life = 1
-    override var bulletSpeed = 3
+    override var bulletSpeed = 2
 
     override fun getScore() = 100
 }

@@ -18,9 +18,9 @@ class GreenTank: EnemyTank() {
             Direction.RIGHT to GREEN_TANK_RIGHT
     )
 
-    override var speed = 3
+    override var speed = 2
     override var life = 1
-    override var bulletSpeed = 4
+    override var bulletSpeed = 3
 
     override fun getScore() = 200
 }

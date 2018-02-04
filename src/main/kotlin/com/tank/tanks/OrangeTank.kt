@@ -17,7 +17,7 @@ class OrangeTank : EnemyTank() {
 
     override var speed = 1
     override var life = 3
-    override var bulletSpeed = 3
+    override var bulletSpeed = 2
 
     override fun getScore() = 300
 }
