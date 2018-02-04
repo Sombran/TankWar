@@ -24,7 +24,7 @@ hs_err_pid*
 .idea/*
 *.xml
 .gradle/*
-build*
+build/*
 out/*
 .idea/workspace.xml
 out/production/resources/map/1.txt
