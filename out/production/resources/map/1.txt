@@ -1,0 +1,4 @@
+com.tank.wall.Steel 0 0
+com.tank.wall.Steel 66 0
+com.tank.wall.Steel 132 0
+com.tank.wall.Steel 132 66

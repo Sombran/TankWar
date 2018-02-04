@@ -1,0 +1,11 @@
+com.tank.wall.Wall 396 396
+com.tank.wall.Wall 462 396
+com.tank.wall.Wall 528 396
+com.tank.wall.Grass 330 462
+com.tank.wall.Grass 396 462
+com.tank.wall.Wall 528 462
+com.tank.wall.Steel 462 594
+com.tank.wall.Steel 528 594
+com.tank.wall.Steel 594 594
+com.tank.wall.Steel 462 660
+com.tank.wall.Steel 594 660
