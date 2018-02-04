@@ -298,12 +298,18 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private fun hasTank(x: Int, y: Int = 1): Boolean {
         return enemies.any {
-            it.x >= x && it.x <= x + EditMap.MATERIAL_WIDTH && it.y >= y && it.y <= y + EditMap.MATERIAL_WIDTH ||
-            it.x >= x && it.x <= x + EditMap.MATERIAL_WIDTH && it.y + it.height >= y && it.y + it.height <= y + EditMap.MATERIAL_WIDTH ||
-            it.x + it.width >= x && it.x + it.width <= x + EditMap.MATERIAL_WIDTH && it.y >= y && it.y <= y + EditMap.MATERIAL_WIDTH ||
-            it.x + it.width >= x && it.x + it.width <= x + EditMap.MATERIAL_WIDTH && it.y + it.height >= y && it.y + it.height <= y + EditMap.MATERIAL_WIDTH
+            pointInOneMaterial(it.x, it.y, x, y) ||
+            pointInOneMaterial(it.x, it.y + it.height, x, y) ||
+            pointInOneMaterial(it.x + it.width, it.y, x, y) ||
+            pointInOneMaterial(it.x + it.width, it.y + it.height, x, y)
         }
     }
+
+    /**
+     * 某个点是否在一块材质内
+     */
+    private fun pointInOneMaterial(pointX: Int, pointY: Int, areaX: Int, areaY: Int)
+            = pointX >= areaX && pointX <= areaX + EditMap.MATERIAL_WIDTH && pointY >= areaY && pointY <= areaY + EditMap.MATERIAL_WIDTH
 
     /**
      * 碰撞
