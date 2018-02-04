@@ -11,8 +11,8 @@ import com.tank.tankEnum.Direction
  */
 class Bullet(positionX: Int, positionY: Int, val direction: Direction, bulletSpeed: Int = 3,val isGood: Boolean = false) : ImageObject() {
     override var image = (if (isGood) BULLET else ENEMY_BULLET)!!
-    override var x = positionX - image.width / 2
-    override var y = positionY - image.height / 2
+    override var x = positionX - width / 2
+    override var y = positionY - height / 2
 
     private val speed = bulletSpeed
 

@@ -33,7 +33,7 @@ abstract class Tank : ImageObject() {
     /**
      * 移动速度
      */
-    open protected var speed = 2
+    open protected var speed = 1
 
     /**
      * 是否正在移动

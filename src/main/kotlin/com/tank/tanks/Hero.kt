@@ -49,11 +49,11 @@ class Hero(private val player: Player = Player.P1) : Tank() {
     fun init() {
         subtractFire()
         if (player == Player.P1) {
-            x = TankGame.WIDTH / 2 - P1_TANK_UP.width / 2 - EditMap.MATERIAL_WIDTH - P1_TANK_UP.width - 4
-            y = TankGame.HEIGHT - image.height - 1
+            x = TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH * 2
+            y = TankGame.HEIGHT - height - 1
         } else {
-            x = TankGame.WIDTH / 2 + P1_TANK_UP.height / 2 + EditMap.MATERIAL_WIDTH + 4
-            y = TankGame.HEIGHT - image.height - 1
+            x = TankGame.WIDTH / 2 + EditMap.MATERIAL_WIDTH * 2
+            y = TankGame.HEIGHT - height - 1
         }
     }
 
@@ -68,12 +68,14 @@ class Hero(private val player: Player = Player.P1) : Tank() {
         doubleFire = true
         bulletSpeed = 7
         shootDelay = 50
+        speed = 2
     }
 
     fun subtractFire() {
         doubleFire = false
         bulletSpeed = 4
         shootDelay = 70
+        speed = 1
     }
 
     private var shootIndex = 0

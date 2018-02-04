@@ -21,8 +21,8 @@ import javax.swing.JPanel
 class TankGame : JPanel() {
 
     companion object {
-        const val WIDTH = 17 * EditMap.MATERIAL_WIDTH
-        const val HEIGHT = 11 * EditMap.MATERIAL_WIDTH
+        const val WIDTH = 14 * EditMap.MATERIAL_WIDTH * 2
+        const val HEIGHT = 11 * EditMap.MATERIAL_WIDTH * 2
 
         const val SCORE_AREA_WEIGHT = 200
 

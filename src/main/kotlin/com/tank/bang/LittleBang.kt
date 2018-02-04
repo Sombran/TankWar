@@ -7,7 +7,7 @@ import com.tank.tankConst.LITTLE_BANG
  * @author youbo
  * 2018/1/30
  */
-class LittleBang(x: Int, y: Int): StaticObject(x - 66, y - 55) {
+class LittleBang(x: Int, y: Int): StaticObject(x - 70 / 2, y - 55 / 2) {
     override val shootable = false
     override val collisionable = false
 

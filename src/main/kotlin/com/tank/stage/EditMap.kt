@@ -20,7 +20,7 @@ import java.io.PrintWriter
 class EditMap(context: TankGame) : StageAbstract(context) {
 
     companion object {
-        const val MATERIAL_WIDTH = 66
+        const val MATERIAL_WIDTH = 70 / 2
     }
 
     private val home = Home()
@@ -36,17 +36,17 @@ class EditMap(context: TankGame) : StageAbstract(context) {
     private val objects = Array(TankGame.HEIGHT / MATERIAL_WIDTH) { arrayOfNulls<StaticObject>(TankGame.WIDTH / MATERIAL_WIDTH) }
 
     override fun paint(g: Graphics) {
-        g.drawImage(home.image, home.x, home.y, null)
-        g.drawImage(P1_TANK_UP, x, y, null)
+        g.drawImage(home.image, home.x, home.y, home.width, home.height, null)
+        g.drawImage(P1_TANK_UP, x, y, MATERIAL_WIDTH, MATERIAL_WIDTH, null)
         objects.forEach { it.forEach { it?.let { g.drawImage(it.image, it.x, it.y, MATERIAL_WIDTH, MATERIAL_WIDTH, null) } } }
     }
 
     override fun keyPressed(e: KeyEvent) {
         when (e.keyCode) {
-            KeyEvent.VK_W, KeyEvent.VK_UP -> { if (y - P1_TANK_UP.height >= 0) y -= MATERIAL_WIDTH }
-            KeyEvent.VK_S, KeyEvent.VK_DOWN -> { if (y + 2 * P1_TANK_UP.height <= TankGame.HEIGHT) y += MATERIAL_WIDTH }
-            KeyEvent.VK_A, KeyEvent.VK_LEFT -> { if (x - P1_TANK_UP.width >= 0) x -= MATERIAL_WIDTH }
-            KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { if (x + 2 * P1_TANK_UP.width <= TankGame.WIDTH) x += MATERIAL_WIDTH }
+            KeyEvent.VK_W, KeyEvent.VK_UP -> { if (y - MATERIAL_WIDTH >= 0) y -= MATERIAL_WIDTH }
+            KeyEvent.VK_S, KeyEvent.VK_DOWN -> { if (y + MATERIAL_WIDTH * 2 <= TankGame.HEIGHT) y += MATERIAL_WIDTH }
+            KeyEvent.VK_A, KeyEvent.VK_LEFT -> { if (x - MATERIAL_WIDTH >= 0) x -= MATERIAL_WIDTH }
+            KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { if (x + MATERIAL_WIDTH * 2 <= TankGame.WIDTH) x += MATERIAL_WIDTH }
             KeyEvent.VK_ENTER -> enterGame()
         }
         when (e.keyChar) {
@@ -80,7 +80,7 @@ class EditMap(context: TankGame) : StageAbstract(context) {
     }
 
     private fun addObject(index: Int) {
-        if (index < 0 || index >= material.size) {
+        if (index < 0 || index > material.size) {
             return
         }
         objects[y / MATERIAL_WIDTH][x / MATERIAL_WIDTH] = if (index == 0) {

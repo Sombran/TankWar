@@ -34,7 +34,7 @@ abstract class EnemyTank: Tank(), Enemy {
 
     init {
         // 左上角、正上方、右上角三个位置的x坐标
-        val xArray = arrayOf(1, TankGame.WIDTH / 2 - P1_TANK_UP.width / 2, TankGame.WIDTH - P1_TANK_UP.width - 1)
+        val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
         x = xArray[Random().nextInt(3)]
         y = 1
     }

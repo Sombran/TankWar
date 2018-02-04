@@ -10,10 +10,10 @@ abstract class ImageObject {
     abstract var image: BufferedImage
 
     open val width
-        get() = image.width
+        get() = image.width / 2
 
     open val height
-        get() = image.height
+        get() = image.height / 2
 
     open val x = 0
     open val y = 1

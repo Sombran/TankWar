@@ -13,8 +13,8 @@ class BigBang(x: Int, y: Int) : StaticObject(x, y) {
 
     private val images = listOf(BIG_BANG1, BIG_BANG2, BIG_BANG3, BIG_BANG4, BIG_BANG5, BIG_BANG6, BIG_BANG7, BIG_BANG8)
 
-    override val width = 60
-    override val height = 60
+    override val width = 60 / 2
+    override val height = 60 / 2
 
     /**
      * 当前显示第几个画面
