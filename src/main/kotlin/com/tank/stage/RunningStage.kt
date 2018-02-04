@@ -98,7 +98,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
 
     companion object {
         // 左上角、正上方、右上角三个位置的x坐标
-        val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
+        val xArray = arrayOf(1, TankGame.WIDTH / 2 + 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
         val enemyArray = arrayOf(GreenTank::class.java, GreyTank::class.java, OrangeTank::class.java)
     }
 
@@ -300,7 +300,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         if (currentEnemyCount >= 4 || allEnemyCount == 20) {
             return
         }
-        if (newEnemyInterval-- != 0) return
+        if (--newEnemyInterval != 0) return
         // 打乱三个位置
         for (x in xArray.shuffle()) {
             if (!hasTank(x)) {
@@ -311,6 +311,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
                 return
             }
         }
+        newEnemyInterval = 50
     }
 
     /**
@@ -329,7 +330,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      * 某个点是否在一块材质内
      */
     private fun pointInOneMaterial(pointX: Int, pointY: Int, areaX: Int, areaY: Int)
-            = pointX >= areaX && pointX <= areaX + EditMap.MATERIAL_WIDTH && pointY >= areaY && pointY <= areaY + EditMap.MATERIAL_WIDTH
+            = pointX > areaX && pointX < areaX + EditMap.MATERIAL_WIDTH - 2 && pointY > areaY && pointY < areaY + EditMap.MATERIAL_WIDTH - 2
 
     /**
      * 碰撞
@@ -534,7 +535,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
     /**
      * 下一关检查
      */
-    private var nextLevelInterval = 2000
+    private var nextLevelInterval = 400
     private fun nextLevelAction() {
         if (!(allEnemyCount == 20 && enemies.isEmpty())) return
         if (nextLevelInterval-- == 0) {
