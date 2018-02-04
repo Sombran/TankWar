@@ -36,7 +36,7 @@ class Bullet(positionX: Int, positionY: Int, val direction: Direction, bulletSpe
     /**
      * 子弹碰撞检测增加的值
      */
-    private val addWidth = 3
+    private val addWidth = 5
 
     /**
      * 子弹碰撞子弹检测，将宽度和高度加增加，以增加子弹消除几率

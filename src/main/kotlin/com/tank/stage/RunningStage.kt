@@ -105,8 +105,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
 
         // TODO 三个位置生成三个敌人
         enemies.add(GreyTank())
-        enemies.add(GreyTank())
-        enemies.add(GreyTank())
+        enemies.add(GreenTank())
+        enemies.add(OrangeTank())
     }
 
     constructor(objects: List<StaticObject>, context: TankGame) : this(context) {
@@ -454,9 +454,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
      * 英雄触碰奖励
      */
     private fun collisionAwardAction() {
-        award?.takeIf { it.collisionBy(hero) } ?.let { heroGetAward(it.award, hero) }
-        if (hero2 != null) award?.takeIf { it.collisionBy(hero2) } ?.let { heroGetAward(it.award, hero2) }
-        award = null
+        award?.takeIf { it.collisionBy(hero) } ?.let { heroGetAward(it.award, hero); award = null }
+        if (hero2 != null) award?.takeIf { it.collisionBy(hero2) } ?.let { heroGetAward(it.award, hero2); award = null }
     }
 
     private fun heroGetAward(award: Award, hero: Hero) {
