@@ -107,6 +107,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, level: Int = 1) :
         enemies.add(GreyTank())
         enemies.add(GreenTank())
         enemies.add(OrangeTank())
+
+        hero.addFire()
     }
 
     constructor(objects: List<StaticObject>, context: TankGame) : this(context) {
