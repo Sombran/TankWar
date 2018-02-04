@@ -16,6 +16,12 @@ class Bullet(positionX: Int, positionY: Int, val direction: Direction, bulletSpe
 
     private val speed = bulletSpeed
 
+    override val width: Int
+        get() = image.width
+
+    override val height: Int
+        get() = image.height
+
     fun step() {
         when (direction) {
             Direction.UP -> y -= speed
@@ -28,20 +34,25 @@ class Bullet(positionX: Int, positionY: Int, val direction: Direction, bulletSpe
     fun outOfBounds() = x < 0 || x > TankGame.WIDTH || y < 0 || y > TankGame.HEIGHT
 
     /**
-     * 子弹碰撞子弹检测，将宽度和高度加10，以增加子弹消除几率
+     * 子弹碰撞检测增加的值
+     */
+    private val addWidth = 3
+
+    /**
+     * 子弹碰撞子弹检测，将宽度和高度加增加，以增加子弹消除几率
      */
     fun collisionBy(other: Bullet): Boolean {
-        val x1 = other.x - 5
-        val y1 = other.y - 5
+        val x1 = other.x - addWidth
+        val y1 = other.y - addWidth
 
-        val x2 = other.x - 5
-        val y2 = other.y + other.height + 5
+        val x2 = other.x - addWidth
+        val y2 = other.y + other.height + addWidth
 
-        val x3 = other.x + other.width + 5
-        val y3 = other.y - 5
+        val x3 = other.x + other.width + addWidth
+        val y3 = other.y - addWidth
 
-        val x4 = other.x + other.width + 5
-        val y4 = other.y + other.height + 5
+        val x4 = other.x + other.width + addWidth
+        val y4 = other.y + other.height + addWidth
 
         return pointIn(x1, y1) || pointIn(x2, y2) || pointIn(x3, y3) || pointIn(x4, y4)
     }
