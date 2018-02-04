@@ -86,6 +86,11 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private val home = Home()
 
+    /**
+     * 当前存在敌人数
+     */
+    private var currentEnemyCount = 0
+
     companion object {
         // 左上角、正上方、右上角三个位置的x坐标
         val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
@@ -114,7 +119,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         }
 
         // 三个位置生成三个敌人
-        xArray.mapTo(enemies) { enemyArray.shuffle().getConstructor(Int::class.java).newInstance(it) }
+        xArray.mapTo(enemies, ::nextEnemy)
+        currentEnemyCount = 3
     }
 
     constructor(objects: List<StaticObject>, context: TankGame, level: Int) : this(context, level = level) {
@@ -268,14 +274,35 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
     }
 
     /**
-     * 随机获得一个敌人
+     * 在指定x位置随机获得一个敌人
      */
-    private fun nextEnemy() {
-        // TODO
-    }
+    private fun nextEnemy(x: Int) = enemyArray.shuffleData().getConstructor(Int::class.java).newInstance(x)
 
     private fun newEnemyAction() {
-        // TODO 检测当前敌人数，小于4时，并且三个位置有空位，生成新敌人
+        // 检测当前敌人数，小于4时，并且三个位置有空位，生成新敌人
+        if (currentEnemyCount >= 4) {
+            return
+        }
+        // 打乱三个位置
+        for (x in xArray.shuffle()) {
+            if (!hasTank(x)) {
+                enemies.add(nextEnemy(x))
+                currentEnemyCount++
+            }
+            if (currentEnemyCount >= 4) return
+        }
+    }
+
+    /**
+     * 判断某个范围内是否有坦克
+     */
+    private fun hasTank(x: Int, y: Int = 1): Boolean {
+        return enemies.any {
+            it.x >= x && it.x <= x + EditMap.MATERIAL_WIDTH && it.y >= y && it.y <= y + EditMap.MATERIAL_WIDTH ||
+            it.x >= x && it.x <= x + EditMap.MATERIAL_WIDTH && it.y + it.height >= y && it.y + it.height <= y + EditMap.MATERIAL_WIDTH ||
+            it.x + it.width >= x && it.x + it.width <= x + EditMap.MATERIAL_WIDTH && it.y >= y && it.y <= y + EditMap.MATERIAL_WIDTH ||
+            it.x + it.width >= x && it.x + it.width <= x + EditMap.MATERIAL_WIDTH && it.y + it.height >= y && it.y + it.height <= y + EditMap.MATERIAL_WIDTH
+        }
     }
 
     /**
@@ -303,7 +330,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      * 坦克死亡检测
      */
     private fun dieAction() {
-        enemies.filterNot(Tank::isLive).forEach { score += it.getScore(); enemies.remove(it); objects.add(BigBang(it.x, it.y)) }
+        enemies.filterNot(Tank::isLive).forEach { score += it.getScore(); enemies.remove(it); objects.add(BigBang(it.x, it.y)); currentEnemyCount-- }
         if (!home.isLive || (!hero.isLive && (hero2 == null || !hero2.isLive))) {
             hero.stopMove()
             hero2?.stopMove()
@@ -472,6 +499,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             Award.BOMB -> {
                 enemies.forEach { objects.add(BigBang(it.x, it.y)) }
                 enemies.clear()
+                currentEnemyCount = 0
             }
             Award.TIMER -> { fixedTime = (1000 / TankGame.DELAY).toInt() * 10 }
             else -> {}
@@ -481,5 +509,20 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
     /**
      * 获得数组中随机一个值
      */
-    fun <T> Array<T>.shuffle() = this[Random().nextInt(this.size)]
+    fun <T> Array<T>.shuffleData() = this[Random().nextInt(this.size)]
+
+    /**
+     * 返回打乱后的数据
+     */
+    fun <T> Array<T>.shuffle(): Array<T> {
+        val rand = Random()
+        val copyArray = this.copyOf()
+        for (i in 0 until this.size) {
+            val index = rand.nextInt(this.size)
+            val tem = copyArray[index]
+            copyArray[index] = copyArray[i]
+            copyArray[i] = tem
+        }
+        return copyArray
+    }
 }
