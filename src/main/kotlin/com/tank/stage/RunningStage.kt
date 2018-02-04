@@ -34,7 +34,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
     /**
      * 英雄坦克
      */
-    private val hero = Hero()
+    private var hero = Hero()
 
     /**
      * 玩家2
@@ -91,6 +91,11 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private var currentEnemyCount = 0
 
+    /**
+     * 已生成的所有敌人数
+     */
+    private var allEnemyCount = 0
+
     companion object {
         // 左上角、正上方、右上角三个位置的x坐标
         val xArray = arrayOf(1, TankGame.WIDTH / 2, TankGame.WIDTH - P1_TANK_UP.width / 2 - 1)
@@ -121,11 +126,18 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         // 三个位置生成三个敌人
         xArray.mapTo(enemies, ::nextEnemy)
         currentEnemyCount = 3
+        allEnemyCount = 3
     }
 
     constructor(objects: List<StaticObject>, context: TankGame, level: Int) : this(context, level = level) {
         this.objects.clear()
         this.objects.addAll(objects)
+    }
+
+    // TODO 临时使用，后期应该使用一个关卡类封装和关卡相关的东西
+    constructor(context: TankGame, level: Int, hero: Hero, score: Int) : this(context, level = level) {
+        this.score = score
+        this.hero = hero
     }
 
     override fun paint(g: Graphics) {
@@ -242,6 +254,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             outOfBoundsAction()
             newEnemyAction()
             clearAction()
+            nextLevelAction()
         }
     }
 
@@ -284,7 +297,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
     private var newEnemyInterval = 200
     private fun newEnemyAction() {
         // 检测当前敌人数，小于4时，并且三个位置有空位，生成新敌人
-        if (currentEnemyCount >= 4) {
+        if (currentEnemyCount >= 4 || allEnemyCount == 20) {
             return
         }
         if (newEnemyInterval-- != 0) return
@@ -293,6 +306,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             if (!hasTank(x)) {
                 enemies.add(nextEnemy(x))
                 currentEnemyCount++
+                allEnemyCount++
                 newEnemyInterval = 200
                 return
             }
@@ -439,7 +453,6 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         objects.forEach { obj ->
             enemies.filter(obj::collisionBy).forEach {
                 it.backStep()
-                it.reStep()
             }
             if (obj.collisionBy(hero)) {
                 hero.backStep()
@@ -515,6 +528,20 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             }
             Award.TIMER -> { fixedTime = (1000 / TankGame.DELAY).toInt() * 10 }
             else -> {}
+        }
+    }
+
+    /**
+     * 下一关检查
+     */
+    private var nextLevelInterval = 2000
+    private fun nextLevelAction() {
+        if (!(allEnemyCount == 20 && enemies.isEmpty())) return
+        if (nextLevelInterval-- == 0) {
+            hero.initPosition()
+            hero2?.initPosition()
+            // 进入下一关
+            context.stage = RunningStage(context, level + 1, hero, score)
         }
     }
 
