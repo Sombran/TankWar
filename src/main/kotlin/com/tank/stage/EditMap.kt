@@ -92,7 +92,7 @@ class EditMap(context: TankGame) : StageAbstract(context) {
 
     private fun enterGame() {
         val objs = getEffectiveObjects()
-        context.stage = RunningStage(objs, context)
+        context.stage = RunningStage(objs, context, 0)
     }
 
     private fun getEffectiveObjects() = objects.flatMap(Array<StaticObject?>::asIterable).fold(arrayListOf()) { r: ArrayList<StaticObject>, t -> t?.let { r.add(t) }; r }
