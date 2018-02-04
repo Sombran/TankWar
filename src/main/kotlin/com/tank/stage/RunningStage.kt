@@ -278,18 +278,24 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private fun nextEnemy(x: Int) = enemyArray.shuffleData().getConstructor(Int::class.java).newInstance(x)
 
+    /**
+     * 可以生产敌人的时候先间隔一下
+     */
+    private var newEnemyInterval = 200
     private fun newEnemyAction() {
         // 检测当前敌人数，小于4时，并且三个位置有空位，生成新敌人
         if (currentEnemyCount >= 4) {
             return
         }
+        if (newEnemyInterval-- != 0) return
         // 打乱三个位置
         for (x in xArray.shuffle()) {
             if (!hasTank(x)) {
                 enemies.add(nextEnemy(x))
                 currentEnemyCount++
+                newEnemyInterval = 200
+                return
             }
-            if (currentEnemyCount >= 4) return
         }
     }
 
