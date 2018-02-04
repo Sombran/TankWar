@@ -19,10 +19,10 @@ abstract class StaticObject(override var x: Int, override var y: Int) : ImageObj
     protected abstract val collisionable: Boolean
 
     override val width
-        get() = image.width + 6
+        get() = super.width + 6
 
     override val height
-        get() = image.height + 6
+        get() = super.height + 6
 
     /**
      * 是否还需要显示，如果为false将会被清除，以后都不会显示
