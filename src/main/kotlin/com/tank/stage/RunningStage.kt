@@ -237,8 +237,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             keySet.contains('j') -> hero2?.direction = Direction.LEFT
             keySet.contains('l') -> hero2?.direction = Direction.RIGHT
         }
-        if (!arrayOf('w', 's', 'a', 'd').any(keySet::contains)) hero.stopMove()
-        if (!arrayOf('i', 'k', 'j', 'l').any(keySet::contains)) hero2?.stopMove()
+        hero.takeUnless { arrayOf('w', 's', 'a', 'd').any(keySet::contains) } ?.stopMove()
+        hero2?.takeUnless { arrayOf('i', 'k', 'j', 'l').any(keySet::contains) } ?.stopMove()
     }
 
     override fun action() {
@@ -263,9 +263,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         hero2?.step()
         bullets.forEach(Bullet::step)
         // 只有定时为0时敌人才能移动
-        if (fixedTime == 0) {
-            enemies.forEach(EnemyTank::step)
-        }
+        enemies.takeIf { fixedTime==0 } ?.forEach(EnemyTank::step)
         objects.forEach(StaticObject::step)
         award?.step()
     }
@@ -274,9 +272,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         bullets.addAll(hero.shoot())
         hero2?.let { bullets.addAll(it.shoot()) }
         // 定时为0时敌人才能开枪
-        if (fixedTime == 0) {
-            enemies.forEach { bullets.addAll(it.shoot()) }
-        }
+        enemies.takeIf { fixedTime==0 } ?.forEach { bullets.addAll(it.shoot()) }
     }
 
     private fun outOfBoundsAction() {
@@ -381,9 +377,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
                     if (enemy.shootBy(bullet)) {
                         enemy.subtractLife()
                         bulletIter.remove()
-                        if (enemy.isLive) {
-                            objects.add(LittleBang(bullet.x, bullet.y))
-                        }
+                        objects.takeIf { enemy.isLive } ?.add(LittleBang(bullet.x, bullet.y))
                         awardHand(enemy.getAward())
                         break
                     }
@@ -404,12 +398,11 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         if (isHit) {
             if (!hero.doubleFire) {
                 objects.add(BigBang(hero.x, hero.y))
-                hero.subtractLife()
                 hero.init()
             } else {
-                hero.subtractFire()
                 objects.add(LittleBang(bullet.x, bullet.y))
             }
+            hero.subtractFire()
         }
         return isHit
     }
@@ -436,9 +429,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             while (bulletIter.hasNext()) {
                 val bullet = bulletIter.next()
                 if (it.shootBy(bullet)) {
-                    if (it !is Steel || (bullet.isGood && hero.doubleFire)) {
-                        it.isShow = false
-                    }
+                    it.takeIf { it !is Steel || (bullet.isGood && hero.doubleFire) } ?.isShow = false
                     readyAdd.add(LittleBang(bullet.x, bullet.y))
                     bulletIter.remove()
                 }
@@ -452,12 +443,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private fun collisionWallAction() {
         objects.forEach { obj ->
-            enemies.filter(obj::collisionBy).forEach {
-                it.backStep()
-            }
-            if (obj.collisionBy(hero)) {
-                hero.backStep()
-            }
+            enemies.filter(obj::collisionBy).forEach(EnemyTank::backStep)
+            hero.takeIf(obj::collisionBy)?.backStep()
             hero2?.takeIf(obj::collisionBy)?.backStep()
         }
     }
@@ -475,10 +462,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
                     other.reStep()
                 }
             }
-            if (enemy.collisionBy(hero)) {
-                enemy.backStep()
-                hero.backStep()
-            }
+            hero.takeIf(enemy::collisionBy)?.let { it.backStep(); enemy.backStep() }
             hero2?.takeIf(enemy::collisionBy)?.let { it.backStep(); enemy.backStep() }
         }
         hero2?.takeIf(hero::collisionBy)?.let { hero.backStep(); it.backStep() }
@@ -515,8 +499,8 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      * 英雄触碰奖励
      */
     private fun collisionAwardAction() {
-        award?.takeIf { it.collisionBy(hero) } ?.let { heroGetAward(it.award, hero); award = null }
-        if (hero2 != null) award?.takeIf { it.collisionBy(hero2) } ?.let { heroGetAward(it.award, hero2); award = null }
+        award?.takeIf { it.collisionBy(hero) } ?.let { heroGetAward(it.award, hero) }
+        if (hero2 != null) award?.takeIf { it.collisionBy(hero2) } ?.let { heroGetAward(it.award, hero2) }
     }
 
     private fun heroGetAward(award: Award, hero: Hero) {
@@ -530,6 +514,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             Award.TIMER -> { fixedTime = (1000 / TankGame.DELAY).toInt() * 10 }
             else -> {}
         }
+        this.award = null
     }
 
     /**
