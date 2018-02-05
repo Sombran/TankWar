@@ -51,7 +51,7 @@ abstract class EnemyTank: Tank(), Enemy {
                     Direction.RIGHT -> bulletX += width / 2
                 }
                 shootIndex = Random().nextInt(200) + 150
-                return arrayOf(Bullet(bulletX, bulletY, direction, bulletSpeed))
+                return arrayOf(Bullet(bulletX, bulletY, this))
             }
         }
         return arrayOf()

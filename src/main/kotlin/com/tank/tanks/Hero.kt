@@ -56,7 +56,7 @@ class Hero(private val player: Player = Player.P1) : Tank() {
             x = TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH * 2
             y = TankGame.HEIGHT - height - 1
         } else {
-            x = TankGame.WIDTH / 2 + EditMap.MATERIAL_WIDTH * 2
+            x = TankGame.WIDTH / 2 + EditMap.MATERIAL_WIDTH * 2 + 5
             y = TankGame.HEIGHT - height - 1
         }
     }
@@ -97,10 +97,10 @@ class Hero(private val player: Player = Player.P1) : Tank() {
             }
             shootIndex = shootDelay
             if (!doubleFire) {
-                arrayOf(Bullet(bulletX, bulletY, direction, bulletSpeed, true))
+                arrayOf(Bullet(bulletX, bulletY, this, true))
             } else {
-                arrayOf(Bullet(bulletX, bulletY, direction, bulletSpeed, true),
-                        Bullet(bulletX2, bulletY2, direction, bulletSpeed, true))
+                arrayOf(Bullet(bulletX, bulletY, this, true),
+                        Bullet(bulletX2, bulletY2, this, true))
             }
         } else {
             arrayOf()

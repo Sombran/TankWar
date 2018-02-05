@@ -3,18 +3,20 @@ package com.tank
 import com.tank.tankConst.BULLET
 import com.tank.tankConst.ENEMY_BULLET
 import com.tank.tankEnum.Direction
+import com.tank.tanks.Tank
 
 /**
  * @author youbo
  * 2018/1/29
  * 子弹类
  */
-class Bullet(positionX: Int, positionY: Int, val direction: Direction, bulletSpeed: Int = 3,val isGood: Boolean = false) : ImageObject() {
+class Bullet(positionX: Int, positionY: Int, val tank: Tank, val isGood: Boolean = false) : ImageObject() {
     override var image = (if (isGood) BULLET else ENEMY_BULLET)!!
     override var x = positionX - width / 2
     override var y = positionY - height / 2
 
-    private val speed = bulletSpeed
+    private val speed = tank.bulletSpeed
+    private val direction = tank.direction
 
     fun step() {
         when (direction) {

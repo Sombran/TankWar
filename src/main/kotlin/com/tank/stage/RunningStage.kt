@@ -427,8 +427,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         val readyDelete = mutableSetOf<Bullet>()
         bullets.forEach {  bullet ->
             objects.filter { it.shootBy(bullet) } .forEach {
-                // TODO 这里要区分子弹所属的玩家是不是双倍火力
-                it.takeIf { it !is Steel || (bullet.isGood && hero.doubleFire) } ?.isShow = false
+                it.takeIf { it !is Steel || bullet.tank.doubleFire } ?.isShow = false
                 readyAdd.add(LittleBang(bullet.x, bullet.y))
                 readyDelete.add(bullet)
             }
