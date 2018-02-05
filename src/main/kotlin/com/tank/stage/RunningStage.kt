@@ -424,17 +424,16 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
      */
     private fun hitWallAction() {
         val readyAdd = mutableSetOf<StaticObject>()
-        objects.forEach {
-            val bulletIter = bullets.iterator()
-            while (bulletIter.hasNext()) {
-                val bullet = bulletIter.next()
-                if (it.shootBy(bullet)) {
-                    it.takeIf { it !is Steel || (bullet.isGood && hero.doubleFire) } ?.isShow = false
-                    readyAdd.add(LittleBang(bullet.x, bullet.y))
-                    bulletIter.remove()
-                }
+        val readyDelete = mutableSetOf<Bullet>()
+        bullets.forEach {  bullet ->
+            objects.filter { it.shootBy(bullet) } .forEach {
+                // TODO 这里要区分子弹所属的玩家是不是双倍火力
+                it.takeIf { it !is Steel || (bullet.isGood && hero.doubleFire) } ?.isShow = false
+                readyAdd.add(LittleBang(bullet.x, bullet.y))
+                readyDelete.add(bullet)
             }
         }
+        bullets.removeAll(readyDelete)
         objects.addAll(readyAdd)
     }
 
