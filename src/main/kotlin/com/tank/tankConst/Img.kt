@@ -48,6 +48,8 @@ val WALL = ImageIO.read(TankGame::class.java.classLoader.getResource("img/walls.
 val GRASS = ImageIO.read(TankGame::class.java.classLoader.getResource("img/grass.gif"))
 val WATER = ImageIO.read(TankGame::class.java.classLoader.getResource("img/water.gif"))
 val STEEL = ImageIO.read(TankGame::class.java.classLoader.getResource("img/steels.gif"))
+val LITTLE_WALL = ImageIO.read(TankGame::class.java.classLoader.getResource("img/wall.gif"))
+val LITTLE_STEEL = ImageIO.read(TankGame::class.java.classLoader.getResource("img/steel.gif"))
 
 val BOMB = ImageIO.read(TankGame::class.java.classLoader.getResource("img/bomb.gif"))
 val TIMER = ImageIO.read(TankGame::class.java.classLoader.getResource("img/timer.gif"))

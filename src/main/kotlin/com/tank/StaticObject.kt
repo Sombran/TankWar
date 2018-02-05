@@ -1,6 +1,6 @@
 package com.tank
 
-import com.tank.tanks.Tank
+import java.awt.Graphics
 
 /**
  * @author youbo
@@ -27,23 +27,27 @@ abstract class StaticObject(override var x: Int, override var y: Int) : ImageObj
     /**
      * 是否还需要显示，如果为false将会被清除，以后都不会显示
      */
-    var isShow: Boolean = true
+    open var isShow: Boolean = true
 
     open fun step() {}
 
-    fun shootBy(bullet: Bullet): Boolean {
+    override fun shootBy(other: Bullet): Boolean {
         if (!shootable) {
             return false
         }
-        return super.shootBy(bullet)
+        return super.shootBy(other)
     }
 
-    fun collisionBy(tank: Tank): Boolean {
+    override fun collisionBy(other: ImageObject): Boolean {
         if (!collisionable) {
             return false
         }
         // 坦克的四个点是否在当前对象内并且当前的四个点是否在坦克内
-        return super.collisionBy(tank) || tank.pointIn(x, y) || tank.pointIn(x + width, y)
-                || tank.pointIn(x, y + height) || tank.pointIn(x + width, y + height)
+        return super.collisionBy(other) || other.pointIn(x, y) || other.pointIn(x + width, y)
+                || other.pointIn(x, y + height) || other.pointIn(x + width, y + height)
+    }
+
+    open fun draw(g: Graphics) {
+        g.drawImage(image, x, y, width, height, null)
     }
 }

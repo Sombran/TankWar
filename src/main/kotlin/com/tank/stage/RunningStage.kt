@@ -161,7 +161,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
 
     private fun drawEnemy(g: Graphics) = enemies.forEach { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
-    private fun drawObject(g: Graphics) = objects.forEach { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
+    private fun drawObject(g: Graphics) = objects.forEach { it.draw(g) }
 
     private fun drawAward(g: Graphics) = award?.let { g.drawImage(it.image, it.x, it.y, it.width, it.height, null) }
 
@@ -427,7 +427,6 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         val readyDelete = mutableSetOf<Bullet>()
         bullets.forEach {  bullet ->
             objects.filter { it.shootBy(bullet) } .forEach {
-                it.takeIf { it !is Steel || bullet.tank.doubleFire } ?.isShow = false
                 readyAdd.add(LittleBang(bullet.x, bullet.y))
                 readyDelete.add(bullet)
             }

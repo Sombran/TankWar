@@ -20,7 +20,7 @@ abstract class ImageObject {
 
     open fun collisionBy(other: ImageObject) = imageObjectIn(other)
 
-    open fun shootBy(other: ImageObject) = imageObjectIn(other)
+    open fun shootBy(other: Bullet) = imageObjectIn(other)
 
     private fun imageObjectIn(other: ImageObject): Boolean {
         val x1 = other.x
