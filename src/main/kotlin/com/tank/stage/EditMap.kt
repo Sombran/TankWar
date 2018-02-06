@@ -20,7 +20,7 @@ import java.io.PrintWriter
 class EditMap(context: TankGame) : StageAbstract(context) {
 
     companion object {
-        const val MATERIAL_WIDTH = 70 / 2
+        const val MATERIAL_WIDTH = (70 / TankGame.SCALE).toInt()
     }
 
     private val home = Home()

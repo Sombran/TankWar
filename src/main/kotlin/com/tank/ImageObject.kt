@@ -10,10 +10,10 @@ abstract class ImageObject {
     abstract var image: BufferedImage
 
     open val width
-        get() = image.width / 2
+        get() = (image.width / TankGame.SCALE).toInt()
 
     open val height
-        get() = image.height / 2
+        get() = (image.height / TankGame.SCALE).toInt()
 
     open val x = 0
     open val y = 1

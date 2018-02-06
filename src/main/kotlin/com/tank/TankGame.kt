@@ -27,6 +27,11 @@ class TankGame : JPanel() {
         const val SCORE_AREA_WEIGHT = 200
 
         const val DELAY: Long = 1000 / 100
+
+        /**
+         * 显示缩放倍数
+         */
+        const val SCALE = 1.5
     }
 
     var stage: StageAbstract = MenuStage(this)
