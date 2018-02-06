@@ -1,9 +1,7 @@
 package com.tank.wall
 
-import com.tank.Bullet
-import com.tank.ImageObject
-import com.tank.StaticObject
-import com.tank.TankGame
+import com.tank.*
+import com.tank.tankConst.HIT_AUDIO
 import com.tank.tankConst.LITTLE_STEEL
 import java.awt.Graphics
 import java.awt.image.BufferedImage
@@ -49,6 +47,9 @@ abstract class GroupWallAbstract(x: Int, y: Int, littleImage: BufferedImage) : S
         var isShoot = false
         content.filter { it.shootBy(other) }.forEach {
             content.takeIf { other.tank.doubleFire || this !is Steel } ?.remove(it)
+            if (this is Steel && !other.tank.doubleFire) {
+                play(HIT_AUDIO)
+            }
             isShoot = true
         }
         return isShoot

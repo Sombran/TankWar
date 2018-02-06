@@ -2,6 +2,7 @@ package com.tank.tanks
 
 import com.tank.Bullet
 import com.tank.TankGame
+import com.tank.play
 import com.tank.stage.EditMap
 import com.tank.tankConst.*
 import com.tank.tankEnum.Direction
@@ -95,6 +96,7 @@ class Hero(private val player: Player = Player.P1) : Tank() {
                 Direction.LEFT -> { bulletX -= width / 2; bulletX2 -= width }
                 Direction.RIGHT -> { bulletX += width / 2; bulletX2 += width }
             }
+            play(FIRE_AUDIO)
             shootIndex = shootDelay
             if (!doubleFire) {
                 arrayOf(Bullet(bulletX, bulletY, this, true))

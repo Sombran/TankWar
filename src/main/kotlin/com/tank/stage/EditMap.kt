@@ -3,7 +3,9 @@ package com.tank.stage
 import com.tank.Home
 import com.tank.StaticObject
 import com.tank.TankGame
+import com.tank.play
 import com.tank.tankConst.P1_TANK_UP
+import com.tank.tankConst.START_AUDIO
 import com.tank.wall.Grass
 import com.tank.wall.Steel
 import com.tank.wall.Wall
@@ -91,6 +93,7 @@ class EditMap(context: TankGame) : StageAbstract(context) {
     private fun enterGame() {
         val objs = getEffectiveObjects()
         context.stage = RunningStage(objs, context, 0)
+        play(START_AUDIO)
     }
 
     private fun getEffectiveObjects() = objects.flatMap(Array<StaticObject?>::asIterable).fold(arrayListOf()) { r: ArrayList<StaticObject>, t -> t?.let { r.add(t) }; r }

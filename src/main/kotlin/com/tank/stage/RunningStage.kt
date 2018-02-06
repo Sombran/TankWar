@@ -1,18 +1,13 @@
 package com.tank.stage
 
-import com.tank.Bullet
-import com.tank.Home
-import com.tank.StaticObject
-import com.tank.TankGame
+import com.tank.*
 import com.tank.award.AwardAbstract
 import com.tank.award.Bomb
 import com.tank.award.DoubleFire
 import com.tank.award.TankTimer
 import com.tank.bang.BigBang
 import com.tank.bang.LittleBang
-import com.tank.tankConst.GAME_OVER
-import com.tank.tankConst.P1_TANK_UP
-import com.tank.tankConst.PAUSE
+import com.tank.tankConst.*
 import com.tank.tankEnum.Award
 import com.tank.tankEnum.Direction
 import com.tank.tankEnum.GameState
@@ -117,6 +112,8 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
         xArray.mapTo(enemies, ::nextEnemy)
         currentEnemyCount = 3
         allEnemyCount = 3
+
+        hero.addFire()
     }
 
     /**
@@ -274,6 +271,9 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
         bullets.filter(Bullet::outOfBounds).forEach {
             bullets.remove(it)
             objects.add(LittleBang(it.x, it.y))
+            if (it.isGood) {
+                play(HIT_AUDIO)
+            }
         }
     }
 
@@ -348,7 +348,7 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
      * 坦克死亡检测
      */
     private fun dieAction() {
-        enemies.filterNot(Tank::isLive).forEach { score += it.getScore(); enemies.remove(it); objects.add(BigBang(it.x, it.y)); currentEnemyCount-- }
+        enemies.filterNot(Tank::isLive).forEach { play(BLAST_AUDIO); score += it.getScore(); enemies.remove(it); objects.add(BigBang(it.x, it.y)); currentEnemyCount-- }
         if (!home.isLive || (!hero.isLive && (hero2 == null || !hero2.isLive))) {
             hero.stopMove()
             hero2?.stopMove()
@@ -371,6 +371,9 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
                     val enemy = enemyIter.next()
                     if (enemy.shootBy(bullet)) {
                         enemy.subtractLife()
+                        if (enemy.isLive) {
+                            play(HIT_AUDIO)
+                        }
                         bulletIter.remove()
                         objects.takeIf { enemy.isLive } ?.add(LittleBang(bullet.x, bullet.y))
                         awardHand(enemy.getAward())
@@ -395,8 +398,10 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
                 objects.add(BigBang(hero.x, hero.y))
                 hero.subtractLife()
                 hero.init()
+                play(BLAST_AUDIO)
             } else {
                 objects.add(LittleBang(bullet.x, bullet.y))
+                play(HIT_AUDIO)
             }
             hero.subtractFire()
         }
@@ -485,7 +490,7 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
      * 子弹打到家
      */
     private fun hitHomeAction() {
-        bullets.filter(home::shootBy).forEach { bullets.remove(it); home.isLive = false }
+        bullets.filter(home::shootBy).forEach { bullets.remove(it); home.isLive = false; play(BLAST_AUDIO) }
     }
 
     /**
@@ -507,6 +512,7 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
             Award.TIMER -> { fixedTime = (1000 / TankGame.DELAY).toInt() * 10 }
             else -> {}
         }
+        play(ADD_AUDIO)
         this.award = null
     }
 
@@ -522,25 +528,5 @@ class RunningStage(context: TankGame, private val hero2: Hero? = null, private v
             // 进入下一关
             context.stage = RunningStage(context, level + 1, hero, hero2, score)
         }
-    }
-
-    /**
-     * 获得数组中随机一个值
-     */
-    fun <T> Array<T>.shuffleData() = this[Random().nextInt(this.size)]
-
-    /**
-     * 返回打乱后的数据
-     */
-    fun <T> Array<T>.shuffle(): Array<T> {
-        val rand = Random()
-        val copyArray = this.copyOf()
-        for (i in 0 until this.size) {
-            val index = rand.nextInt(this.size)
-            val tem = copyArray[index]
-            copyArray[index] = copyArray[i]
-            copyArray[i] = tem
-        }
-        return copyArray
     }
 }
