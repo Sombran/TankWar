@@ -98,7 +98,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
 
     companion object {
         // 左上角、正上方、右上角三个位置的x坐标
-        val xArray = arrayOf(1, TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH / 2, TankGame.WIDTH - (P1_TANK_UP.width / TankGame.SCALE).toInt() - 1)
+        val xArray = arrayOf(1, TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH / 2 + 3, TankGame.WIDTH - (P1_TANK_UP.width / TankGame.SCALE).toInt() - 1)
         val enemyArray = arrayOf(GreenTank::class.java, GreyTank::class.java, OrangeTank::class.java)
     }
 
