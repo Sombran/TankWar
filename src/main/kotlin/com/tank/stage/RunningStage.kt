@@ -109,17 +109,12 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             if (!file.exists()) {
                 file = File("map/1.txt")
             }
-            if (file.exists()) {
-                // 加载地图
-                val scanner = Scanner(file)
-                while (scanner.hasNext()) {
-                    val className = scanner.next()
-                    val clazz = Class.forName(className)
-                    val x = scanner.nextInt()
-                    val y = scanner.nextInt()
-                    val staticObj = clazz.getConstructor(Int::class.java, Int::class.java).newInstance(x, y)
-                    objects.add(staticObj as StaticObject)
-                }
+            // 加载地图
+            file.takeIf(File::exists)?.forEachLine {
+                val content = it.split(" ")
+                val clazz = Class.forName(content[0])
+                val staticObj = clazz.getConstructor(Int::class.java, Int::class.java).newInstance(content[1].toInt(), content[2].toInt())
+                objects.add(staticObj as StaticObject)
             }
         }
 

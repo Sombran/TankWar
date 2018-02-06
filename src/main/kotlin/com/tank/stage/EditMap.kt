@@ -67,16 +67,14 @@ class EditMap(context: TankGame) : StageAbstract(context) {
         val objs = getEffectiveObjects()
         var index = 1
         var file = File("map/$index.txt")
-        if (!file.parentFile.exists()) file.parentFile.mkdirs()
+        file.takeUnless { it.parentFile.exists() } ?.parentFile?.mkdirs()
         while (file.exists()) {
             index++
             file = File("map/$index.txt")
         }
-        val writer = PrintWriter(file)
         for (o in objs) {
-            writer.println("${o::class.java.name} ${o.x} ${o.y}")
+            file.appendText("${o::class.java.name} ${o.x} ${o.y}\n")
         }
-        writer.close()
     }
 
     private fun addObject(index: Int) {
