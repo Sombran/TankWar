@@ -40,8 +40,8 @@ abstract class EnemyTank: Tank(), Enemy {
         if (shootIndex != 0) {
             shootIndex--
         } else {
-            // 只有5%的机会发射，发射后随机设定攻击间隔
-            if (Random().nextInt(100) > 95) {
+            // 只有10%的机会发射，发射后随机设定攻击间隔
+            if (Random().nextInt(100) > 90) {
                 var bulletX = x + width / 2
                 var bulletY = y + height / 2
                 when (direction) {
