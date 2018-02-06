@@ -53,7 +53,7 @@ class Hero(private val player: Player = Player.P1) : Tank() {
 
     fun initPosition() {
         if (player == Player.P1) {
-            x = TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH * 2
+            x = TankGame.WIDTH / 2 - EditMap.MATERIAL_WIDTH * 3
             y = TankGame.HEIGHT - height - 1
         } else {
             x = TankGame.WIDTH / 2 + EditMap.MATERIAL_WIDTH * 2 + 5
