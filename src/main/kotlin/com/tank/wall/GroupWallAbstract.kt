@@ -26,7 +26,7 @@ abstract class GroupWallAbstract(x: Int, y: Int, littleImage: BufferedImage) : S
         get() = content.isNotEmpty()
 
     init {
-        val w = (LITTLE_STEEL.width / TankGame.SCALE).toInt()
+        val w = (LITTLE_STEEL.width / TankGame.SCALE).toInt() + 3
         content.add(LittleWall(x, y, littleImage))
         content.add(LittleWall(x + w, y, littleImage))
         content.add(LittleWall(x, y + w, littleImage))
@@ -61,9 +61,9 @@ abstract class GroupWallAbstract(x: Int, y: Int, littleImage: BufferedImage) : S
         override val shootable = true
         override val collisionable = true
         override val width: Int
-            get() = (LITTLE_STEEL.width / TankGame.SCALE).toInt() + 6
+            get() = (LITTLE_STEEL.width / TankGame.SCALE).toInt() + 3
 
         override val height: Int
-            get() = (LITTLE_STEEL.width / TankGame.SCALE).toInt() + 6
+            get() = (LITTLE_STEEL.width / TankGame.SCALE).toInt() + 3
     }
 }
