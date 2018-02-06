@@ -2,6 +2,8 @@ package com.tank.stage
 
 import com.tank.TankGame
 import com.tank.tankConst.SELECT
+import com.tank.tankEnum.Player
+import com.tank.tanks.Hero
 import java.awt.Graphics
 import java.awt.event.KeyEvent
 
@@ -33,7 +35,7 @@ class MenuStage(context: TankGame) : StageAbstract(context) {
     private fun enter() {
         when (select.index) {
             0 -> context.stage = RunningStage(context)
-            1 -> context.stage = RunningStage(context, true)
+            1 -> context.stage = RunningStage(context, Hero(Player.P2))
             2 -> context.stage = EditMap(context)
         }
     }

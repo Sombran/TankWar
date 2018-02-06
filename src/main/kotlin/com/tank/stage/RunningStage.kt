@@ -29,17 +29,12 @@ import java.util.*
  * @author youbo
  * 2018/2/3
  */
-class RunningStage(context: TankGame, isPair: Boolean = false, private val level: Int = 1) : StageAbstract(context) {
+class RunningStage(context: TankGame, private val hero2: Hero? = null, private val level: Int = 1) : StageAbstract(context) {
 
     /**
      * 英雄坦克
      */
     private var hero = Hero()
-
-    /**
-     * 玩家2
-     */
-    private val hero2 = if (isPair) Hero(Player.P2) else null
 
     /**
      * 子弹集合
@@ -124,13 +119,18 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         allEnemyCount = 3
     }
 
+    /**
+     * 编辑地图使用
+     */
     constructor(objects: List<StaticObject>, context: TankGame, level: Int) : this(context, level = level) {
         this.objects.clear()
         this.objects.addAll(objects)
     }
 
-    // TODO 临时使用，后期应该使用一个关卡类封装和关卡相关的东西
-    constructor(context: TankGame, level: Int, hero: Hero, score: Int) : this(context, level = level) {
+    /**
+     * 下一关使用
+     */
+    constructor(context: TankGame, level: Int, hero: Hero, hero2: Hero?, score: Int) : this(context, hero2, level = level) {
         this.score = score
         this.hero = hero
     }
@@ -393,6 +393,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
         if (isHit) {
             if (!hero.doubleFire) {
                 objects.add(BigBang(hero.x, hero.y))
+                hero.subtractLife()
                 hero.init()
             } else {
                 objects.add(LittleBang(bullet.x, bullet.y))
@@ -519,7 +520,7 @@ class RunningStage(context: TankGame, isPair: Boolean = false, private val level
             hero.initPosition()
             hero2?.initPosition()
             // 进入下一关
-            context.stage = RunningStage(context, level + 1, hero, score)
+            context.stage = RunningStage(context, level + 1, hero, hero2, score)
         }
     }
 
